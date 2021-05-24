@@ -10,3 +10,4 @@ temp.foo
 test.txt
 cmake-build-debug/
 .clion*
+.idea/
