@@ -1,0 +1,12 @@
+.vscode/
+test/
+*.o
+*.gch
+*.out
+infile
+outfile
+file.hole
+temp.foo
+test.txt
+cmake-build-debug/
+.clion*
