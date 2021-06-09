@@ -28,6 +28,7 @@ int main() {
     char c1, c2;
     read(fd1, &c1, 1);
     read(fd2, &c2, 1);
+    // c1: a, c2: f
     printf("c1: %c, c2: %c\n", c1, c2);
     return 0;
 }
