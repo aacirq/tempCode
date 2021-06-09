@@ -18,5 +18,8 @@ target_link_libraries(test3_offset_of_two_fd IncludeLib)
 add_executable(test4_fcntl test4_fcntl.c)
 target_link_libraries(test4_fcntl IncludeLib)
 
+add_executable(test_exercise_3_2 test_exercise_3_2.cpp)
+target_link_libraries(test_exercise_3_2 IncludeLib)
+
 add_executable(test_exercise_3_6 test_exercise_3_6.c)
 target_link_libraries(test_exercise_3_6 IncludeLib)
