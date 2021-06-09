@@ -5,6 +5,7 @@
 //
 
 #include "apue.h"
+#include <fcntl.h>
 
 char buf1[] = "abcdefghij";
 char buf2[] = "ABCDEFGHIJ";
