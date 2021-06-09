@@ -11,3 +11,6 @@ target_link_libraries(test3_cp IncludeLib)
 
 add_executable(test4_fcntl test4_fcntl.c)
 target_link_libraries(test4_fcntl IncludeLib)
+
+add_executable(test2_O_APPEND test2_O_APPEND.c)
+target_link_libraries(test2_O_APPEND IncludeLib)
