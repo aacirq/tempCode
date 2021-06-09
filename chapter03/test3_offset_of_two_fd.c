@@ -1,5 +1,6 @@
 //
 // Created by renxin on 2021/6/9.
+// 验证同一个进程下，两个fd都打开同一个文件，文件偏移量是否有影响
 //
 
 #include "apue.h"
