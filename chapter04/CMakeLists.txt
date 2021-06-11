@@ -14,3 +14,6 @@ target_link_libraries(test4_chmod IncludeLib)
 
 add_executable(test5_unlink test5_unlink.c)
 target_link_libraries(test5_unlink IncludeLib)
+
+add_executable(test6_futimens test6_futimens.c)
+target_link_libraries(test6_futimens IncludeLib)
