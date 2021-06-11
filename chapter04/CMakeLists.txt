@@ -17,3 +17,9 @@ target_link_libraries(test5_unlink IncludeLib)
 
 add_executable(test6_futimens test6_futimens.c)
 target_link_libraries(test6_futimens IncludeLib)
+
+add_executable(test7_getcwd test7_getcwd.c)
+target_link_libraries(test7_getcwd IncludeLib)
+
+add_executable(test8_st_dev test8_st_dev.c)
+target_link_libraries(test8_st_dev IncludeLib)
