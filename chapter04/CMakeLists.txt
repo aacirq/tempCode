@@ -11,3 +11,6 @@ target_link_libraries(test3_umask IncludeLib)
 
 add_executable(test4_chmod test4_chmod.c)
 target_link_libraries(test4_chmod IncludeLib)
+
+add_executable(test5_unlink test5_unlink.c)
+target_link_libraries(test5_unlink IncludeLib)
