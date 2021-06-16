@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #define MAXARGS 20
 #define ARGLEN 100
@@ -24,14 +25,14 @@ int main() {
             arg_list[num_arg] = make_arg(arg_buf);
             num_arg++;
         } else {
-            break;
+            if (num_arg > 0) {
+                arg_list[num_arg++] = NULL;
+                execute(arg_list);
+                num_arg = 0;
+            }
         }
     }
 
-    if (num_arg > 0) {
-        arg_list[num_arg++] = NULL;
-        execute(arg_list);
-    }
     return 0;
 }
 
@@ -50,7 +51,21 @@ char *make_arg(char *buf) {
 
 /* 执行程序 */
 void execute(char * const argv[]) {
-    execvp(argv[0], argv);
-    perror("execvp failed");
-    exit(1);
+    int child_pid = fork();
+    int st;
+    switch (child_pid) {
+        case -1:
+            perror("fork error");
+            exit(1);
+            break;
+        case 0:
+            execvp(argv[0], argv);
+            perror("execvp failed");
+            exit(1);
+            break;
+        default:
+            while (wait(&st) != child_pid) {}
+            printf("child exist with status %d, %d\n", st>>8, st&0xFF);
+            break;
+    }
 }

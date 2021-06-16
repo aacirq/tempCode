@@ -10,6 +10,7 @@ add_subdirectory(./chapter04)
 add_subdirectory(./chapter05)
 
 add_subdirectory(./linux_cmd)
+add_subdirectory(./uulp)
 
 set(CMAKE_CXX_STANDARD 11)
 
