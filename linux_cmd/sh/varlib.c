@@ -75,10 +75,27 @@ void VLlist() {
     }
 }
 
-int VLexport(const char *str) {
-    // TODO
+int VLexport(const char *var) {
+    struct var *item = find_item(var, 0);
+
+    if (item == NULL) {
+        return -1;
+    } else {
+        item->global = 1;
+        return 0;
+    }
 }
 
 char *VLlookup(const char *var) {
-    // TODO
+    struct var *item = find_item(var, 0);
+    if (item == NULL)
+        return NULL;
+
+    char *p = strchr(item->str, '=');
+    p++;
+    size_t len = strlen(p);
+    char *res = malloc(len + 1);
+    strncpy(res, p, len);
+    res[len] = '\0';
+    return res;
 }

@@ -23,11 +23,10 @@ void VLlist();
 
 /**
  * 全局化
- * 将变量添加到环境中，如果str中的变量名部分是一个局部变量，那么把它添加到环境中，如果str中的变量名不存在，那么新建一个环境
- * @param str "var=value"形式的字符串
- * @return
+ * @param var "var=value"形式的字符串
+ * @return -1 - not a variable; 0 - OK
  */
-int VLexport(const char *str);
+int VLexport(const char *var);
 
 /**
  * 增加/更新变量 name=value
@@ -38,7 +37,7 @@ int VLexport(const char *str);
 int VLstore(const char *name, const char *value);
 
 /**
- * 取得var的值
+ * 取得var的值，深复制
  * @param var
  * @return
  */

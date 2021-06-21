@@ -101,7 +101,7 @@ int builtin_command(char *const *arglist, int *status) {
             rv = 1;
     } else if (strcmp(arglist[0], "export") == 0) {
         if (arglist[1] != NULL && okname(arglist[1]))
-            *status = VLexport(arglist[0]);
+            *status = VLexport(arglist[1]);
         else
             *status = -1;
         rv = 1;
