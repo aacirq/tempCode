@@ -7,8 +7,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <ctype.h>
 
 #include "sh.h"
+#include "varlib.h"
 
 char *next_cmd(const char *prompt, FILE *fp) {
     fprintf(stdout, "%s", prompt);
@@ -74,15 +76,62 @@ char **split_cmd(const char *cmd) {
 }
 
 int process(char *const *arglist) {
-    if (arglist[0] == NULL)
+    int rv = -1;
+    if (arglist[0] == NULL) {
+        rv = 0;
+    } else if (is_control_command(arglist[0])) {
+        rv = do_control_command(arglist);
+    } else if (ok_to_execute(arglist)) {
+        if (!builtin_command(arglist, &rv))
+            rv = execute(arglist);
+    }
+    return rv;
+}
+
+int builtin_command(char *const *arglist, int *status) {
+    int rv = 0;
+
+    if (strcmp(arglist[0], "set") == 0) {
+        VLlist(); // output all variables
+        *status = 0;
+        rv = 1;
+    } else if (strchr(arglist[0], '=') != NULL) {
+        *status = assign(arglist[0]);
+        if (*status != -1)
+            rv = 1;
+    } else if (strcmp(arglist[0], "export") == 0) {
+        if (arglist[1] != NULL && okname(arglist[1]))
+            *status = VLexport(arglist[0]);
+        else
+            *status = -1;
+        rv = 1;
+    }
+
+    return rv;
+}
+
+int assign(const char *str) {
+    int rv = -1;
+    char *p = strchr(str, '=');
+    *p = '\0';
+    if (okname(str))
+        rv = VLstore(str, p + 1);
+    *p = '=';
+    return rv;
+}
+
+int okname(const char *name) {
+    if (name == NULL || *name == '\0')
         return 0;
-    if (is_control_command(arglist[0])) {
-        return do_control_command(arglist);
+    if (isdigit(*name))
+        return 0;
+    const char *p = name;
+    while (*p != '\0') {
+        if (!(isalnum(*p)) && *p != '_')
+            return 0;
+        p++;
     }
-    if (ok_to_execute(arglist)) {
-        return execute(arglist);
-    }
-    return 0;
+    return 1;
 }
 
 int is_control_command(const char *arg) {

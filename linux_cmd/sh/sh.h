@@ -29,6 +29,28 @@ char **split_cmd(const char *cmd);
 int process(char *const *arglist);
 
 /**
+ * judge if builtin command
+ * @param arglist 参数列表
+ * @param status 标识状态
+ * @return 0 - 不是builtin命令；1 - 是builtin命令
+ */
+int builtin_command(char *const *arglist, int *status);
+
+/**
+ * store str
+ * @param str string in format "name=var"
+ * @return -1 - failed, 0 - success
+ */
+int assign(const char *str);
+
+/**
+ * check if name is legal
+ * @param name name string
+ * @return 1 - legal; 0 - illegal
+ */
+int okname(const char *name);
+
+/**
  * 判定是否是shell脚本的内容，例如if, then, else, fi这些
  * @param arg 参数，用于判定是否为脚本内容
  * @return 1-脚本内容，0-命令
