@@ -166,19 +166,38 @@ int do_control_command(char *const *arglist) {
                 if_state = WANT_THEN;
             } else {
                 if_result = FAIL;
-                if_state = WANT_THEN;
+                if_state = WANT_ELSE;
             }
             rv = 0;
         }
     } else if (strcmp(arg, "then") == 0) {
-        if (if_state != WANT_THEN) {
-            rv = syn_err("then unexpected");
-        } else {
+        if (if_state == WANT_THEN || if_state == WANT_ELSE) {
             if_state = THEN_BLOCK;
             rv = 0;
+        } else {
+            rv = syn_err("then unexpected");
         }
+        // if (if_state != WANT_THEN) {
+        //     rv = syn_err("then unexpected");
+        // } else {
+        //     if_state = THEN_BLOCK;
+        //     rv = 0;
+        // }
+    } else if (strcmp(arg, "else") == 0) {
+        if (if_state == WANT_ELSE || if_state == THEN_BLOCK) {
+            if_state = ELSE_BLOCK;
+            rv = 0;
+        } else {
+            rv = syn_err("else unexpected");
+        }
+        // if (if_state != WANT_ELSE) {
+        //     rv = syn_err("else unexpected");
+        // } else {
+        //     if_state = ELSE_BLOCK;
+        //     rv = 0;
+        // }
     } else if (strcmp(arg, "fi") == 0) {
-        if (if_state != THEN_BLOCK) {
+        if (if_state != THEN_BLOCK && if_state != ELSE_BLOCK) {
             rv = syn_err("fi unexpected");
         } else {
             if_state = NEUTRAL;
@@ -196,12 +215,13 @@ int ok_to_execute(char *const *arglist) {
     if (if_state == WANT_THEN) {
         syn_err("then expected");
         rv = 0;
+    } else if (if_state == WANT_ELSE) {
+        syn_err("else expected");
+        rv = 0;
     } else if (if_state == THEN_BLOCK) {
-        if (if_result == FAIL) {
-            rv = 0;
-        } else {
-            rv = 1;
-        }
+        rv = (if_result == SUCCESS) ? 1 : 0;
+    } else if (if_state == ELSE_BLOCK) {
+        rv = (if_result == FAIL) ? 1 : 0;
     }
     return rv;
 }
