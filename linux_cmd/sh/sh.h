@@ -21,10 +21,47 @@ char *next_cmd(const char *prompt, FILE *fp);
 char **split_cmd(const char *cmd);
 
 /**
+ * process user command
+ * @param arglist 读取的参数列表
+ * @return result of processing command
+ *         0 - success, -1 - problem happened
+ */
+int process(char *const *arglist);
+
+/**
+ * 判定是否是shell脚本的内容，例如if, then, else, fi这些
+ * @param arg 参数，用于判定是否为脚本内容
+ * @return 1-脚本内容，0-命令
+ */
+int is_control_command(const char *arg);
+
+/**
+ * 处理脚本内容，执行
+ * @param arglist 参数列表
+ * @return 0 - 执行成功，-1 - 执行失败，语法错误
+ */
+int do_control_command(char *const *arglist);
+
+/**
+ * 判定这条命令是否能执行，还是应该跳过
+ * @param arglist 参数列表
+ * @return 1 - 可以执行，0 - 跳过
+ */
+int ok_to_execute(char *const *arglist);
+
+/**
+ * 出现错误，打印输出信息，调整区域为中立区
+ * @param msg 错误提示信息
+ * @return -1
+ */
+int syn_err(const char *msg);
+
+/**
  * 执行shell命令
  * @param arglist 参数列表
+ * @return 0 - 执行成功，-1 - 失败
  */
-void execute(char *const *arglist);
+int execute(char *const *arglist);
 
 /**
  * 释放参数列表（包括列表本身）

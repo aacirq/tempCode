@@ -11,10 +11,11 @@ int main() {
     char *cmd_str = NULL;
     char **arglist = NULL;
     char prompt[] = "> ";
+    int res;
 
     while ((cmd_str = next_cmd(prompt, stdin)) != NULL) {
         if ((arglist = split_cmd(cmd_str)) != NULL) {
-            execute(arglist);
+            res = process(arglist);
             freelist(arglist);
         }
         free(cmd_str);

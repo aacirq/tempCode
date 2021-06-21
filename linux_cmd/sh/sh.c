@@ -73,9 +73,95 @@ char **split_cmd(const char *cmd) {
     return buf;
 }
 
-void execute(char *const argv[]) {
+int process(char *const *arglist) {
+    if (arglist[0] == NULL)
+        return 0;
+    if (is_control_command(arglist[0])) {
+        return do_control_command(arglist);
+    }
+    if (ok_to_execute(arglist)) {
+        return execute(arglist);
+    }
+    return 0;
+}
+
+int is_control_command(const char *arg) {
+    return (strcmp(arg, "if") == 0)
+           || (strcmp(arg, "then") == 0)
+           || (strcmp(arg, "else") == 0)
+           || (strcmp(arg, "fi") == 0);
+}
+
+enum states {NEUTRAL, WANT_THEN, THEN_BLOCK, WANT_ELSE, ELSE_BLOCK};
+enum cmd_results {SUCCESS, FAIL};
+
+static int if_state = NEUTRAL;
+static int if_result = SUCCESS;
+static int last_stat = 0;
+
+int do_control_command(char *const *arglist) {
+    char *arg = *arglist;
+    int rv = -1;
+
+    if (strcmp(arg, "if") == 0) {
+        if (if_state != NEUTRAL) {
+            rv = syn_err("if unexpected");
+        } else {
+            last_stat = process(arglist + 1);
+            if (last_stat == 0) {
+                if_result = SUCCESS;
+                if_state = WANT_THEN;
+            } else {
+                if_result = FAIL;
+                if_state = WANT_THEN;
+            }
+            rv = 0;
+        }
+    } else if (strcmp(arg, "then") == 0) {
+        if (if_state != WANT_THEN) {
+            rv = syn_err("then unexpected");
+        } else {
+            if_state = THEN_BLOCK;
+            rv = 0;
+        }
+    } else if (strcmp(arg, "fi") == 0) {
+        if (if_state != THEN_BLOCK) {
+            rv = syn_err("fi unexpected");
+        } else {
+            if_state = NEUTRAL;
+            rv = 0;
+        }
+    } else {
+        fprintf(stderr, "internal error processing: %s", arg);
+        exit(2);
+    }
+    return rv;
+}
+
+int ok_to_execute(char *const *arglist) {
+    int rv = 1;
+    if (if_state == WANT_THEN) {
+        syn_err("then expected");
+        rv = 0;
+    } else if (if_state == THEN_BLOCK) {
+        if (if_result == FAIL) {
+            rv = 0;
+        } else {
+            rv = 1;
+        }
+    }
+    return rv;
+}
+
+int syn_err(const char *msg) {
+    if_state = NEUTRAL;
+    fprintf(stderr, "syntax error: %s\n", msg);
+    return -1;
+}
+
+int execute(char *const argv[]) {
     int child_pid = fork();
-    int st;
+    int st = -1;
     if (child_pid == -1) {
         perror("fork error");
         exit(1);
@@ -87,6 +173,7 @@ void execute(char *const argv[]) {
         if (wait(&st) == -1) {
             perror("wait");
         }
+        return st;
     }
 }
 
