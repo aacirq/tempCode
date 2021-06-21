@@ -76,9 +76,9 @@ void VLlist() {
 }
 
 int VLexport(const char *str) {
-
+    // TODO
 }
 
 char *VLlookup(const char *var) {
-
+    // TODO
 }
