@@ -92,8 +92,12 @@ int is_control_command(const char *arg) {
            || (strcmp(arg, "fi") == 0);
 }
 
-enum states {NEUTRAL, WANT_THEN, THEN_BLOCK, WANT_ELSE, ELSE_BLOCK};
-enum cmd_results {SUCCESS, FAIL};
+enum states {
+    NEUTRAL, WANT_THEN, THEN_BLOCK, WANT_ELSE, ELSE_BLOCK
+};
+enum cmd_results {
+    SUCCESS, FAIL
+};
 
 static int if_state = NEUTRAL;
 static int if_result = SUCCESS;
