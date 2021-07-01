@@ -4,6 +4,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
 
 #define SLEEP_SECOND 2
 #define TRIES 3
@@ -13,6 +15,7 @@ int get_response(char *question, int maxtries);
 void tty_mode(int);
 void set_cr_noecho_mode();
 void set_nodelay_mode();
+void ctrl_c_handler(int signum);
 
 int main() {
     // save tty mode
@@ -21,6 +24,9 @@ int main() {
     set_cr_noecho_mode();
     // set no-delay mode
     set_nodelay_mode();
+
+    signal(SIGINT, ctrl_c_handler);
+    signal(SIGQUIT, SIG_IGN);
 
     int res = get_response(QUESTION, TRIES);
     // restore tty mode
@@ -65,10 +71,13 @@ int get_response(char *question, int maxtries) {
 void tty_mode(int how) {
     static struct termios original_mode;
     static int original_flags;
+    static int stored = 0;
+
     if (how == 0) {
         tcgetattr(0, &original_mode);
         original_flags = fcntl(0, F_GETFL);
-    } else {
+        stored = 1;
+    } else if (stored) {
         tcsetattr(0, TCSANOW, &original_mode);
         fcntl(0, F_SETFL, original_flags);
     }
@@ -90,4 +99,11 @@ void set_nodelay_mode() {
     termflags = fcntl(0, F_GETFL);
     termflags |= O_NDELAY;
     fcntl(0, F_SETFL, termflags);
+}
+
+// Handler of Ctrl-C. restore tty mode and exit;
+void ctrl_c_handler(int signum) {
+    tty_mode(1);
+    printf("\n");
+    exit(1);
 }
