@@ -5,13 +5,18 @@
 
 int get_response(char *);
 int tty_mode(int);
-void set_crmode();
+void set_cr_noecho_mode();
 
 int main() {
-    tty_mode(0);  // save tty mode
-    set_crmode(); // set chr-by-chr mode
+    // save tty mode
+    tty_mode(0);
+    // set chr-by-chr mode
+    set_cr_noecho_mode();
+
     int res = get_response(QUESTION);
-    tty_mode(1);  // restore tty mode
+    printf("\n");
+    // restore tty mode
+    tty_mode(1);
     return res;
 }
 
@@ -29,8 +34,6 @@ int get_response(char *question) {
         case 'N':
         case EOF:
             return 1;
-        default:
-            printf("\ncannot understand %c, Please type <y> or <n>\n", c);
         }
     }
 }
@@ -47,10 +50,11 @@ int tty_mode(int how) {
 }
 
 // put file descriptor 0(stdin) into chr-by-chr mode
-void set_crmode() {
+void set_cr_noecho_mode() {
     struct termios ttystate;
     tcgetattr(0, &ttystate);
     ttystate.c_lflag &= ~ICANON;
+    ttystate.c_lflag &= ~ECHO;
     ttystate.c_cc[VMIN] = 1;
     tcsetattr(0, TCSANOW, &ttystate);
 }
