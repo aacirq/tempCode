@@ -1,51 +1,76 @@
 #include <stdio.h>
 #include <termios.h>
+#include <fcntl.h>
+#include <string.h>
+#include <ctype.h>
+#include <unistd.h>
 
-# define QUESTION "Do you want another transaction"
+#define SLEEP_SECOND 2
+#define TRIES 3
+#define QUESTION "Do you want another transaction"
 
-int get_response(char *);
-int tty_mode(int);
+int get_response(char *question, int maxtries);
+void tty_mode(int);
 void set_cr_noecho_mode();
+void set_nodelay_mode();
 
 int main() {
     // save tty mode
     tty_mode(0);
     // set chr-by-chr mode
     set_cr_noecho_mode();
+    // set no-delay mode
+    set_nodelay_mode();
 
-    int res = get_response(QUESTION);
-    printf("\n");
+    int res = get_response(QUESTION, TRIES);
     // restore tty mode
     tty_mode(1);
+
+    printf("\n");
     return res;
 }
 
+static int get_ok_char() {
+    int c;
+    while ((c = getchar()) == EOF && strchr("yYnN", c) != NULL)
+        ;
+    return c;
+}
+
 // ask a question and wait for y/n answer
-// return: 0->yes, 1->no
-int get_response(char *question) {
+// return: 0->yes, 1->no, 2->timeout
+int get_response(char *question, int maxtries) {
     char c;
     printf("%s(y/n): ", question);
+    fflush(stdout);
+
     while (1) {
-        switch (c = getchar()) {
-        case 'y':
-        case 'Y':
+        sleep(SLEEP_SECOND);
+        c = tolower(get_ok_char());
+        if (c == 'y') {
             return 0;
-        case 'n':
-        case 'N':
-        case EOF:
+        } else if (c == 'n') {
             return 1;
         }
+        maxtries--;
+        if (maxtries == 0) {
+            return 2;
+        }
+        // printf("Beep\n");
     }
 }
 
 // how == 0 -> save current mode
 // how == 1 -> restore mode
-int tty_mode(int how) {
+void tty_mode(int how) {
     static struct termios original_mode;
+    static int original_flags;
     if (how == 0) {
-        return tcgetattr(0, &original_mode);
+        tcgetattr(0, &original_mode);
+        original_flags = fcntl(0, F_GETFL);
     } else {
-        return tcsetattr(0, TCSANOW, &original_mode);
+        tcsetattr(0, TCSANOW, &original_mode);
+        fcntl(0, F_SETFL, original_flags);
     }
 }
 
@@ -57,4 +82,12 @@ void set_cr_noecho_mode() {
     ttystate.c_lflag &= ~ECHO;
     ttystate.c_cc[VMIN] = 1;
     tcsetattr(0, TCSANOW, &ttystate);
+}
+
+// set file descriptor 0(stdin) into nodelay mode
+void set_nodelay_mode() {
+    int termflags;
+    termflags = fcntl(0, F_GETFL);
+    termflags |= O_NDELAY;
+    fcntl(0, F_SETFL, termflags);
 }
