@@ -14,6 +14,10 @@
 #include "varlib.h"
 
 void setup() {
+    extern char **environ;
+
+    VLenviron2table(environ);
+
     signal(SIGINT, SIG_IGN);
     signal(SIGQUIT, SIG_IGN);
 }
@@ -245,6 +249,11 @@ int execute(char *const argv[]) {
         perror("fork error");
         exit(1);
     } else if (child_pid == 0) {
+        extern char ** environ;
+
+        environ = VLtable2environ();
+        signal(SIGINT, SIG_DFL);
+        signal(SIGQUIT, SIG_DFL);
         execvp(argv[0], argv);
         perror("execvp failed");
         exit(1);

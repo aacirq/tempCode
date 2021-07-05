@@ -39,8 +39,21 @@ int VLstore(const char *name, const char *value);
 /**
  * 取得var的值，深复制
  * @param var
- * @return
+ * @return address of copied variable
  */
 char *VLlookup(const char *var);
+
+/**
+ * convert env to table of struct var
+ * @param env environ tables to convert
+ * @return 1 - ok; 0 - fail
+ */
+int VLenviron2table(char **env);
+
+/**
+ * Convert table(struct var *) to environ table
+ * @return address of environ table(char **)
+ */
+char **VLtable2environ();
 
 #endif //LEARNAPUE_VARLIB_H

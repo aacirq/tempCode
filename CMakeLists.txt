@@ -14,4 +14,4 @@ add_subdirectory(./uulp)
 
 set(CMAKE_CXX_STANDARD 11)
 
-add_executable(learnApue main.cpp)
+add_executable(learnApue main.c)

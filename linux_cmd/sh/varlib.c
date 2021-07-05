@@ -99,3 +99,42 @@ char *VLlookup(const char *var) {
     res[len] = '\0';
     return res;
 }
+
+int VLenviron2table(char **env) {
+    for (int i = 0; env[i] != NULL; i++) {
+        if (i == MAXVARS)
+            return 0;
+        char *str = malloc((strlen(env[i]) + 1) * sizeof(char));
+        if (str == NULL)
+            return 0;
+        strcpy(str, env[i]);
+        table[i].str;
+        table[i].global = 1;
+    }
+    return 1;
+}
+
+char **VLtable2environ() {
+    int i = 0;
+    int n = 0;
+    while (i < MAXVARS && table[i].str != NULL) {
+        if (table[i].global == 1)
+            n++;
+        i++;
+    }
+
+    char **res = malloc(sizeof(char*) * (n + 1));
+    if (res == NULL)
+        return NULL;
+
+    int j = 0;
+    i = 0;
+    while (i < MAXVARS && table[i].str != NULL) {
+        if (table[i].global == 1) {
+            res[j] = table[i].str;
+            j++;
+        }
+    }
+    res[j] = NULL;
+    return res;
+}
