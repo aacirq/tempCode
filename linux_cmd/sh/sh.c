@@ -8,9 +8,15 @@
 #include <unistd.h>
 #include <sys/wait.h>
 #include <ctype.h>
+#include <signal.h>
 
 #include "sh.h"
 #include "varlib.h"
+
+void setup() {
+    signal(SIGINT, SIG_IGN);
+    signal(SIGQUIT, SIG_IGN);
+}
 
 char *next_cmd(const char *prompt, FILE *fp) {
     fprintf(stdout, "%s", prompt);

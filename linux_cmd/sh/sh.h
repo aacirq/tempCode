@@ -6,6 +6,11 @@
 #define LEARNAPUE_SH_H
 
 /**
+ * set signal response function
+ */
+void setup();
+
+/**
  * 读取一行命令
  * @param prompt 打印的提示符
  * @param fp 输入流

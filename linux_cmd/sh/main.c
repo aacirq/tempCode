@@ -13,6 +13,8 @@ int main() {
     char prompt[] = "> ";
     int res;
 
+    setup();
+
     while ((cmd_str = next_cmd(prompt, stdin)) != NULL) {
         if ((arglist = split_cmd(cmd_str)) != NULL) {
             res = process(arglist);
