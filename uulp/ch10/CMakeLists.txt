@@ -1,0 +1,7 @@
+include_directories(${PROJECT_SOURCE_DIR}/include)
+
+add_executable(stdin_reader1 ./stdin_reader1.c)
+add_executable(stdin_reader2 ./stdin_reader2.c)
+add_executable(whotofile ./whotofile.c)
+add_executable(pipedemo ./pipedemo.c)
+add_executable(pipe ./pipe.c)
