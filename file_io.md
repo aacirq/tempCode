@@ -29,7 +29,7 @@
 ## 系统IO
 
 - 读写普通文件：
-    open, read, write, close
+    open, lseek, read, write, close, fcntl(设置权限，读取权限)
 
 - 读写文件元数据：
     stat，fstat
@@ -38,7 +38,7 @@
     opendir, readdir, closedir
 
 - 重定向：
-    dup2
+    dup, dup2
 
 
 ## 标准IO
