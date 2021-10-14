@@ -1,7 +1,3 @@
-//
-// Created by renxin on 2021/6/11.
-//
-
 #include <sys/stat.h>
 #include <sys/sysmacros.h>
 
