@@ -17,4 +17,6 @@ void err_sys(const char *, ...) __attribute__((noreturn));
 void err_ret(const char *, ...);
 void err_dump(const char *, ...) __attribute__((noreturn));
 
+char *path_alloc(size_t *sizep);
+
 #endif /* _APUE_H */

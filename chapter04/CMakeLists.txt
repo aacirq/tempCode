@@ -23,3 +23,6 @@ target_link_libraries(test7_getcwd IncludeLib)
 
 add_executable(test8_st_dev test8_st_dev.c)
 target_link_libraries(test8_st_dev IncludeLib)
+
+add_executable(test9_traverse test9_traverse)
+target_link_libraries(test9_traverse IncludeLib)
