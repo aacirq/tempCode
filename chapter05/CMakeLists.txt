@@ -14,3 +14,5 @@ target_link_libraries(test4_mkstemp IncludeLib)
 
 add_executable(test5_memstream test5_memstream.c)
 target_link_libraries(test5_memstream IncludeLib)
+
+add_executable(test_buf_free test_buf_free.c)
