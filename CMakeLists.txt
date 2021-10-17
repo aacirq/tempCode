@@ -8,6 +8,7 @@ add_subdirectory(./chapter02)
 add_subdirectory(./chapter03)
 add_subdirectory(./chapter04)
 add_subdirectory(./chapter05)
+add_subdirectory(./chapter06)
 
 add_subdirectory(./linux_cmd)
 add_subdirectory(./uulp)
