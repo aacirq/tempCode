@@ -8,3 +8,6 @@ target_link_libraries(test2_read_line IncludeLib)
 
 add_executable(test3_buffer_info test3_buffer_info.c)
 target_link_libraries(test3_buffer_info IncludeLib)
+
+add_executable(test4_mem_stream test4_mem_stream.c)
+target_link_libraries(test4_mem_stream IncludeLib)
