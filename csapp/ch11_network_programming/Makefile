@@ -23,8 +23,11 @@ echo_server.out: echo_server.c csapp.o
 tiny.out: tiny_server.c csapp.o
 	$(CC) -o tiny.out tiny_server.c csapp.o $(CFLAGS)
 
+adder.out: csapp.o ./cgi-bin/adder.c
+	$(CC) -o cgi-bin/adder.out ./cgi-bin/adder.c csapp.o $(CFLAGS)
+
 csapp.o: ../csapp.c ../csapp.h
 	$(CC) -c ../csapp.c $(CFLAGS)
 
 clean:
-	rm *.out *.o
+	rm *.out *.o cgi-bin/*.out
