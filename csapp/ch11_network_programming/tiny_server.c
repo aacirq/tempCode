@@ -139,6 +139,7 @@ int parse_uri(const char *uri, char *filename, char *cgiargs) {
     // dynamic
     if ((p = strchr(uri, '?')) != NULL) {
       strcpy(cgiargs, p + 1);
+      *p = '\0';
     } else {
       strcpy(cgiargs, "");
     }
