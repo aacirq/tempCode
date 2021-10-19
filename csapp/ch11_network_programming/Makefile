@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -D_POSIX_C_SOURCE=200809L -std=c99 -D_POSIX_PTHREAD_SEMANTICS -lpthread
+CFLAGS = -g -Wall -D_POSIX_C_SOURCE=200809L -std=c99 -D_POSIX_PTHREAD_SEMANTICS -lpthread
 
 all: hex2dd.out dd2hex.out hostinfo.out echo_client.out echo_server.out
 
@@ -19,6 +19,9 @@ echo_client.out: echo_client.c csapp.o
 
 echo_server.out: echo_server.c csapp.o
 	$(CC) -o echo_server.out echo_server.c csapp.o $(CFLAGS)
+
+tiny.out: tiny_server.c csapp.o
+	$(CC) -o tiny.out tiny_server.c csapp.o $(CFLAGS)
 
 csapp.o: ../csapp.c ../csapp.h
 	$(CC) -c ../csapp.c $(CFLAGS)
