@@ -6,7 +6,9 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
+#ifndef MAXLINE
 #define MAXLINE 4096
+#endif
 
 int main(int argc, char *argv[]) {
   struct addrinfo *p, *listp;
