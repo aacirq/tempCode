@@ -77,5 +77,10 @@ int main() {
 
   ptr1 = std::move(ptr_circle);
 
+  smart_ptr<int> ptr_int{new int(1)};
+
+  // error: cannot convert ‘int*’ to ‘Shape*’ in assignment
+  // ptr3 = std::move(ptr_int);
+
   return 0;
 }
