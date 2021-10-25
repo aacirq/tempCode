@@ -65,6 +65,8 @@ class smart_ptr {
   T *m_ptr;
 };
 
+#ifdef TEST
+
 int main() {
   smart_ptr<Shape> ptr1{create_shape(ShapeType::circle)};
   // smart_ptr<Shape> ptr2{ptr1};   // ERROR, have no copy-constructor
@@ -84,3 +86,5 @@ int main() {
 
   return 0;
 }
+
+#endif
