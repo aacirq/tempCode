@@ -1,29 +1,3 @@
-enum class ShapeType { circle, triangle, rectangle };
-
-class Shape {};
-class Circle : public Shape {};
-class Triangle : public Shape {};
-class Rectangle : public Shape {};
-
-Shape *create_shape(ShapeType type) {
-  switch (type) {
-    case ShapeType::circle:
-      return new Circle();
-      break;
-
-    case ShapeType::triangle:
-      return new Triangle();
-      break;
-
-    case ShapeType::rectangle:
-      return new Rectangle();
-      break;
-
-    default:
-      break;
-  }
-}
-
 #include <utility>
 
 template <typename T>
@@ -66,6 +40,31 @@ class smart_ptr {
 };
 
 #ifdef TEST
+enum class ShapeType { circle, triangle, rectangle };
+
+class Shape {};
+class Circle : public Shape {};
+class Triangle : public Shape {};
+class Rectangle : public Shape {};
+
+Shape *create_shape(ShapeType type) {
+  switch (type) {
+    case ShapeType::circle:
+      return new Circle();
+      break;
+
+    case ShapeType::triangle:
+      return new Triangle();
+      break;
+
+    case ShapeType::rectangle:
+      return new Rectangle();
+      break;
+
+    default:
+      break;
+  }
+}
 
 int main() {
   smart_ptr<Shape> ptr1{create_shape(ShapeType::circle)};
