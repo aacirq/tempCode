@@ -10,6 +10,7 @@ using namespace std;
 template <typename T, typename U>
 ostream &operator<<(ostream &os, const pair<T, U> &p) {
   cout << "(" << p.first << ", " << p.second << ")";
+  return os;
 }
 
 template <typename Container>
