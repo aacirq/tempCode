@@ -1,0 +1,6 @@
+add_executable(exe1 example1.cpp)
+add_executable(exe2 example2.cpp)
+add_executable(exe3 example3.cpp)
+add_executable(exe4 example4.cpp)
+add_executable(exe5 example5.cpp)
+add_executable(exe6 example6.cpp)
